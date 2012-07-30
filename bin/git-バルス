@@ -1,0 +1,93 @@
+#!/bin/sh
+#
+# 【警告】
+# このコマンドを実行すると、可能な限りGitリポジトリを
+# 修復不能な状態にしようとします。
+#
+#  - まず、masterの一番最初のcommitまでreset --hardします。
+#  - 次に、masterが一番最初のcommitを挿してる状態でgit push -f origin masterします。
+#    この時点で、リモートリポジトリのmasterは破壊されます。
+#  - ローカルのbranchを全てgit branch -D で削除します。
+#  - リモートのbranchを全てgit push -f origin :branch_name で削除します。
+#  - reflogできないように git gc --aggressive します
+#  - rm -rf ./* でファイルを全て削除します。
+#
+# 絶対に実行しないでください。
+# するなよ、絶対に実行するなよ！！
+
+
+echo "天空の鯖ラピュタ - Togetter : http://togetter.com/li/45193"
+echo ""
+echo "「SEは死なぬ！　何度でも蘇るさ！」"
+echo "「立て！ デスマーチは終わりだ。終点がサーバールームとは上出来じゃないか。ここへ来い」"
+echo ""
+echo "「これがサーバールームですって？　ここはお墓よ。あなたとシステムの。プロジェクトが亡びたのに鯖だけ生きてるなんて滑稽だわ」"
+echo "「あなたにソースコードは渡さない。あなたはシステムをリリースさせることもできずにプロジェクトと死ぬの。今はプロジェクトがなぜ亡びたのか、私よくわかる。ゴンドアの谷の歌にあるもの。『定時に退勤し　休日は家で過ごそう　賞与とともに冬を越え　昇給とともに春を歌おう』」"
+echo "「どんなに大きな元受を持っても、沢山のかわいそうな派遣PGを操っても、プロジェクトを解決する銀の銃弾なんて無いのよ！」"
+echo ""
+echo "「プロジェクトは亡びぬ！　何度でも蘇るさ！　仕事の受注こそ、営業の夢だからだ！」"
+echo "「次は仕様変更だ。席に付けソースコードを修正しろ。工数の遅れをとりもどせ」"
+echo ""
+echo "「待てーっ！　ソースはコミットした。仕様変更してみろ。コードは動かないぞ」"
+echo "「新卒ー、来ちゃだめ。この人はどうせ私たちを使い潰す気よ！」"
+echo "「小僧、今月の給与と引きかえだ。工数の見積もりを言え！　それともその役職で私と勝負するかね」"
+echo "「先輩と二人きりで話がしたい」"
+echo "「来ちゃだめ、会社を捨てて逃げて！」"
+echo "「３人日待ってやる」"
+echo ""
+echo "「新卒……」"
+echo "「先輩、落ちついてよく聞いて下さい。rootパスワードを教えて。ぼくも一緒にタイプする。キーボードに手をのせて。同僚達は本社に帰したよ」"
+echo ""
+echo "「時間だ！　見積もりを聞こう"
+echo "「「『rm -rf /』！」」"
+echo ""
+echo "「うわあ！　うわーっ！　ああ、鯖が、鯖がぁ……！　ああ、ああ！　鯖が……ああーっ……！」"
+echo ""
+
+yes_no() {
+  MSG=$1
+  while :
+  do
+    echo -n "${MSG} y/N: "
+    read ans
+    case $ans in
+      [yY]|[yY][eE][sS]) return 0 ;;
+      [nN]|[nN][oO]) return 1 ;;
+    esac
+  done
+}
+
+yes_no "本当にバルスしますか?"
+if [ $? -ne 0 ]; then
+  return 0;
+fi
+
+
+INITIAL_COMMIT=`git rev-list HEAD | tail -n 1`
+echo "git reset --hard HEAD"
+git reset --hard HEAD
+echo "git checkout master"
+git checkout master
+echo "git reset --hard ${INITIAL_COMMIT}"
+git reset --hard ${INITIAL_COMMIT}
+echo "git push -f origin master"
+git push -f origin master
+
+for branch in `git branch | cut -d " " -f3 | sort | uniq` ; do
+  echo "git branch -D ${branch}"
+  git branch -D ${branch}
+done
+
+
+for branch in `git branch -r | cut -d " " -f3 | grep -v HEAD | grep -v master | sed -e "s/^origin\///g" | sort | uniq` ; do
+  echo "git push -f origin :${branch}"
+  git push -f origin :${branch}
+done
+
+echo "git gc --aggressive"
+git gc --aggressive
+echo "rm -rf ./*"
+rm -rf ./*
+echo "rm -rf ./.git"
+rm -rf ./.git
+

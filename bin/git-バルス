@@ -52,7 +52,7 @@ yes_no() {
     read ans
     case $ans in
       [yY]|[yY][eE][sS]) return 0 ;;
-      [nN]|[nN][oO]) return 1 ;;
+      ""|[nN]|[nN][oO]) return 1 ;;
     esac
   done
 }

@@ -48,7 +48,7 @@ yes_no() {
   MSG=$1
   while :
   do
-    echo -n "${MSG} y/N: "
+    printf "${MSG} y/N: "
     read ans
     case $ans in
       [yY]|[yY][eE][sS]) return 0 ;;

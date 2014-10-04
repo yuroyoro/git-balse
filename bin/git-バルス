@@ -59,7 +59,7 @@ yes_no() {
 
 yes_no "本当にバルスしますか?"
 if [ $? -ne 0 ]; then
-  return 0;
+  exit 0
 fi
 
 
